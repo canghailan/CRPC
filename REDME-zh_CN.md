@@ -3,8 +3,7 @@
 
 
 ## 简介
-CRPC (Concise RPC) 是一种遵循互联网标准设计的现代 RPC 协议。
-它旨在消除开发者友好体验与高性能通信之间的鸿沟。
+CRPC (Concise RPC) 是一个遵循互联网标准设计的现代 RPC 协议，旨在兼顾开发者体验与高性能。
 通过深度集成 CBOR (RFC 8949) 序列化协议、HTTP/2 传输层以及 Zstd/OpenZL 现代压缩算法，
 构建了一个标准化、支持平滑演进的通信框架，实现“逻辑简明易用，传输极致性能”的设计愿景。
 
@@ -15,7 +14,7 @@ CRPC (Concise RPC) 是一种遵循互联网标准设计的现代 RPC 协议。
 - JSON-RPC：作为轻量级的远程调用协议，易于实现和调试，但缺乏现代传输层支持和高效的二进制序列化，难以满足高性能场景需求
 - gRPC (Protobuf)：通过 HTTP/2 和二进制格式极大提升了性能，但强制性的预编译 Schema（.proto）和复杂的工具链增加了开发心智负担，且难以在浏览器中直接使用
 
-CRPC 通过内容协商机制（Content Negotiation）和透明压缩层，同时提供易用性和高性能。
+CRPC 通过内容协商机制（Content Negotiation）和 HTTP/2 传输层、透明压缩层，同时提供易用性和高性能。
 
 
 
@@ -28,15 +27,15 @@ CRPC 默认运行在 HTTP/2 之上，以利用其现代网络特性：
 
 
 ### 兼容传输：HTTP/1.1
-为了确保兼容性，CRPC 支持在 HTTP/1.1 上运行：
+CRPC 支持运行在 HTTP/1.1 之上，以确保兼容性：
 - 仅支持特定通信方式：请求响应、服务端流（基于 Server-Sent Events）
 - 主要用于旧有系统集成、浏览器直接访问及开发调试
 
 
 ### 自定义传输： 基于 TCP、MQTT、WebSocket 等
-参考 JSON-RPC。
+CRPC 支持运行在非 HTTP 协议之上，以适应物联网等场景，参考 JSON-RPC 协议规范。
 
-#### Request
+#### 请求
 ```json
 {
     "crpc": 1,
@@ -49,7 +48,7 @@ CRPC 默认运行在 HTTP/2 之上，以利用其现代网络特性：
 }
 ```
 
-#### Response
+#### 响应
 ```json
 {
     "crpc": 1,
@@ -197,3 +196,30 @@ Content-Encoding: zstd
   "message": "Hello, CRPC User!"
 }
 ```
+
+
+
+## 参考文档
+- [RFC 8949](https://datatracker.ietf.org/doc/html/rfc8949)：CBOR（Concise Binary Object Representation）核心规范
+- [RFC 8610](https://datatracker.ietf.org/doc/html/rfc8610)：CDDL（Concise Data Definition Language）规范
+- [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457)：Problem Details for HTTP APIs 标准
+- [RFC 9290](https://datatracker.ietf.org/doc/html/rfc9290)：基于CBOR的Problem Details扩展规范
+- [RFC 9052](https://datatracker.ietf.org/doc/html/rfc9052)：COSE（CBOR Object Signing and Encryption）规范
+- [RFC 8742](https://datatracker.ietf.org/doc/html/rfc8742)：CBOR Sequence 规范
+- [JSONL (JSON Lines)](https://jsonlines.org/)：JSON行格式官方规范
+- [RFC 7540](https://datatracker.ietf.org/doc/html/rfc7540)：HTTP/2 核心协议规范
+- [RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230)：HTTP/1.1 核心协议规范
+- [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231#section-5.3)：HTTP 内容协商
+- [RFC 8446](https://datatracker.ietf.org/doc/html/rfc8446)：TLS 1.3 核心协议规范
+- [RFC 9842](https://datatracker.ietf.org/doc/html/rfc9842)：共享字典压缩规范
+- [Server-Sent Events (SSE)](https://html.spec.whatwg.org/multipage/server-sent-events.html)：Server-Sent Events 标准
+- [Apache Arrow](https://arrow.apache.org/docs/)：开源列式内存数据格式标准
+- [ADBC (Arrow Database Connectivity)](https://arrow.apache.org/adbc/)：Arrow数据库连接标准
+- [Zstandard](https://github.com/facebook/zstd)：Meta开源无损压缩算法，通用数据的高性能压缩算法
+- [OpenZL](https://github.com/facebook/openzl)：Meta开源格式感知压缩算法，结构化数据的高性能压缩算法
+- [LZ4](https://github.com/lz4/lz4)：极致高速无损压缩算法
+- [RFC 7932](https://datatracker.ietf.org/doc/html/rfc7932)：Brotli，静态高比率压缩算法，[官方实现](https://github.com/google/brotli)
+- [RFC 1952](https://datatracker.ietf.org/doc/html/rfc1952)：Gzip，经典无损压缩算法
+- [REST架构](https://roy.gbiv.com/pubs/dissertation/rest_arch_style.htm)：REST 架构
+- [gRPC](https://grpc.io/docs/guides/)：gRPC 官方规范
+- [JSON-RPC 2.0](https://www.jsonrpc.org/specification)：官方规范，CRPC自定义非HTTP传输层（TCP/MQTT/WebSocket）消息格式的参考基础
